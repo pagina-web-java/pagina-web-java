@@ -1,83 +1,184 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8" />
-    <title>VisionStock</title>
+    <title>VisionStock - Admin Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos adicionales para el inventario (puedes moverlos a styles.css si prefieres) */
+        .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .product-card {
+            background: #1a162a;
+            border-radius: 12px;
+            padding: 20px;
+            width: 220px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            text-align: left;
+        }
+
+        .product-category {
+            font-size: 10px;
+            text-transform: uppercase;
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: white;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .product-category.botellas {
+            background: #3A86FF;
+        }
+
+        .product-category.filetes {
+            background: #FF006E;
+        }
+
+        .product-category.snacks {
+            background: #FFBE0B;
+            color: #000;
+        }
+
+        .stock {
+            color: #6CFF7A;
+            font-weight: bold;
+        }
+
+        #inventory-section h2 {
+            margin-top: 40px;
+            font-size: 32px;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="container">
 
-<div class="container">
+        <!-- NAVBAR -->
+        <div class="navbar">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                <span>VisionStock</span>
+            </div>
 
-    <!-- NAVBAR -->
-    <div class="navbar">
-        <div class="logo">
-            <div class="logo-icon"></div>
-            <span>VisionStock</span>
+            <div class="menu">
+                <a href="#">Features</a>
+                <a href="#">Pricing</a>
+                <a href="#">Contact</a>
+            </div>
+
+            <div class="right-menu">
+                <a href="#" class="login">Login</a>
+                <button class="btn-demo">Request a Demo</button>
+            </div>
         </div>
 
-        <div class="menu">
-            <a href="#">Features</a>
-            <a href="#">Pricing</a>
-            <a href="#">Contact</a>
+        <!-- HERO SECTION -->
+        <div id="hero-section">
+            <h1>VisionStock</h1>
+
+            <p class="subtitle">
+                Inventario inteligente con IA para administradores. Detecta botellas, filetes y snacks en tiempo real.
+            </p>
+
+            <div class="hero-buttons">
+                <button id="start-trial-btn" class="btn-primary">Ver Inventario en Tiempo Real</button>
+            </div>
         </div>
 
-        <div class="right-menu">
-            <a href="#" class="login">Login</a>
-            <button class="btn-demo">Request a Demo</button>
+        <!-- INVENTORY SECTION (oculta al inicio) -->
+        <div id="inventory-section" style="display: none;">
+            <h2>🔍 Inventario Detectado</h2>
+            <div id="inventory-list">
+                <p>Cargando inventario desde la API...</p>
+            </div>
         </div>
+
+        <!-- TRUSTED BRANDS -->
+        <p class="trusted">TRUSTED BY INNOVATIVE BUSINESSES WORLDWIDE</p>
+
+        <div class="brands">
+            <span>🏪 Local Mart</span>
+            <span>☕ BeanBrew</span>
+            <span>👗 Style Co.</span>
+            <span>📚 PageTurners</span>
+            <span>🌸 Bloom</span>
+        </div>
+
     </div>
 
-    <!-- HERO -->
-    <h1>VisionStock</h1>
+    <!-- SCRIPT: Conexión con API en Java -->
+    <script>
+        document.getElementById('start-trial-btn').addEventListener('click', async () => {
+            const btn = document.getElementById('start-trial-btn');
+            const hero = document.getElementById('hero-section');
+            const inventorySection = document.getElementById('inventory-section');
+            const inventoryList = document.getElementById('inventory-list');
 
-    <p class="subtitle">
-        Inventario inteligente con IA. Effortlessly manage your inventory with the
-        power of artificial intelligence. Scan, track, and optimize your stock in
-        real-time.
-    </p>
+            // Deshabilitar botón y mostrar estado de carga
+            btn.disabled = true;
+            btn.textContent = 'Cargando...';
+            inventoryList.innerHTML = '<p>Cargando inventario desde la API...</p>';
 
-    <div class="hero-buttons">
-        <button class="btn-primary">Start Free Trial</button>
-        <button class="btn-secondary">Learn More</button>
-    </div>
+            try {
+                // 👉 Conecta con la API hecha en Java (puerto 8080)
+                const response = await fetch('http://localhost:8080/api/inventory');
 
-    <!-- HERO IMAGE -->
-    <div class="hero-img-box">
-        <img src="assets/img.jpg" class="hero-img">
+                if (!response.ok) {
+                    throw new Error(`Error ${response.status}: ${response.statusText}`);
+                }
 
-        <div class="tag tag-left">
-            <span class="tag-title">Organic T-Shirt</span><br>
-            SKU: 12345<br>
-            <span class="tag-stock">In Stock: 15</span>
-        </div>
+                const products = await response.json();
 
-        <div class="tag tag-right">
-            <span class="tag-title">Handmade Mug</span><br>
-            SKU: 67890<br>
-            <span class="tag-stock">In Stock: 8</span>
-        </div>
+                // Renderizar productos
+                if (products.length === 0) {
+                    inventoryList.innerHTML = '<p>No se han detectado productos aún.</p>';
+                } else {
+                    let html = '<div class="product-grid">';
+                    products.forEach(p => {
+                        const category = p.category || 'sin-categoria';
+                        html += `
+                        <div class="product-card">
+                            <div class="product-category ${category}">${category}</div>
+                            <h3>${p.name || 'Producto sin nombre'}</h3>
+                            <p><strong>SKU:</strong> ${p.sku || 'N/A'}</p>
+                            <p><strong>Stock:</strong> <span class="stock">${p.stock != null ? p.stock : '0'}</span></p>
+                        </div>`;
+                    });
+                    html += '</div>';
+                    inventoryList.innerHTML = html;
+                }
 
-        <div class="footer-labels">
-            <span>🤖 AI Processing</span>
-            <span>🔄 Syncing</span>
-        </div>
-    </div>
+                // Mostrar dashboard y ocultar hero
+                hero.style.display = 'none';
+                inventorySection.style.display = 'block';
 
-    <!-- TRUSTED BRANDS -->
-    <p class="trusted">TRUSTED BY INNOVATIVE BUSINESSES WORLDWIDE</p>
-
-    <div class="brands">
-        <span>🏪 Local Mart</span>
-        <span>☕ BeanBrew</span>
-        <span>👗 Style Co.</span>
-        <span>📚 PageTurners</span>
-        <span>🌸 Bloom</span>
-    </div>
-
-</div>
-
+            } catch (err) {
+                console.error('Error al conectar con la API:', err);
+                inventoryList.innerHTML = `
+                    <p style="color: #ff6b6b; max-width: 600px; margin: 20px auto;">
+                        ⚠️ No se pudo cargar el inventario. 
+                        <br>Asegúrate de que el <strong>servidor Java</strong> esté corriendo en 
+                        <code>http://localhost:8080</code> 
+                        y que la base de datos MySQL esté activa.
+                    </p>
+                `;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Ver Inventario en Tiempo Real';
+            }
+        });
+    </script>
 </body>
+
 </html>

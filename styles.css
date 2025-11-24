@@ -1,0 +1,197 @@
+/* ---------- GENERAL ---------- */
+body {
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    background: #0B071A;
+    color: white;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    text-align: center;
+    padding: 20px;
+}
+
+/* ---------- NAVBAR ---------- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo-icon {
+    width: 12px;
+    height: 12px;
+    background: #8A3FFC;
+    border-radius: 4px;
+}
+
+.menu {
+    display: flex;
+    gap: 30px;
+}
+
+.menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.right-menu {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.btn-demo {
+    background: #6C3BFF;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-demo:hover {
+    background: #7A4BFF;
+}
+
+.login {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+/* ---------- HERO CONTENT ---------- */
+h1 {
+    font-size: 50px;
+    font-weight: 800;
+    margin-top: 40px;
+}
+
+.subtitle {
+    max-width: 600px;
+    margin: 0 auto;
+    opacity: 0.8;
+}
+
+.hero-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.btn-primary {
+    background: #6C3BFF;
+    padding: 12px 22px;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-primary:hover { background: #7A4BFF; }
+
+.btn-secondary {
+    background: #262335;
+    padding: 12px 22px;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+/* ---------- HERO IMAGE ---------- */
+.hero-img-box {
+    position: relative;
+    margin-top: 40px;
+}
+
+.hero-img {
+    width: 100%;
+    border-radius: 12px;
+}
+
+.tag {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.65);
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.tag-left {
+    top: 38%;
+    left: 12%;
+}
+
+.tag-right {
+    top: 60%;
+    right: 10%;
+}
+
+.tag-title {
+    font-weight: 700;
+}
+
+.tag-stock {
+    color: #6CFF7A;
+}
+
+.footer-labels {
+    position: absolute;
+    bottom: 15px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 8px 15px;
+    border-radius: 8px;
+    display: flex;
+    gap: 15px;
+    font-size: 12px;
+}
+
+/* ---------- TRUSTED BRANDS ---------- */
+.trusted {
+    margin-top: 30px;
+    opacity: 0.7;
+    font-size: 12px;
+}
+
+.brands {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    font-size: 14px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+    h1 { font-size: 36px; }
+
+    .menu {
+        display: none; /* Oculta secciones en móvil */
+    }
+
+    .brands {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .footer-labels {
+        right: 10px;
+        bottom: 10px;
+        font-size: 10px;
+    }
+}

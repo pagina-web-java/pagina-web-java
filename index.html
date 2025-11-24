@@ -1,27 +1,83 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
     <title>VisionStock</title>
-
-    <!-- Estilos globales -->
-    <link rel="stylesheet" href="src/styles/global.css">
-    <link rel="stylesheet" href="src/styles/navbar.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
+<div class="container">
+
     <!-- NAVBAR -->
-    <div id="navbar-container"></div>
+    <div class="navbar">
+        <div class="logo">
+            <div class="logo-icon"></div>
+            <span>VisionStock</span>
+        </div>
 
-    <!-- HERO (se agregará después en otra tarea) -->
-    <main>
-        <h2 style="color:white; text-align:center; margin-top:120px;">
-            Aquí irá el Hero después...
-        </h2>
-    </main>
+        <div class="menu">
+            <a href="#">Features</a>
+            <a href="#">Pricing</a>
+            <a href="#">Contact</a>
+        </div>
 
-    <!-- Script para cargar componentes -->
-    <script src="src/components/Navbar.js"></script>
+        <div class="right-menu">
+            <a href="#" class="login">Login</a>
+            <button class="btn-demo">Request a Demo</button>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <h1>VisionStock</h1>
+
+    <p class="subtitle">
+        Inventario inteligente con IA. Effortlessly manage your inventory with the
+        power of artificial intelligence. Scan, track, and optimize your stock in
+        real-time.
+    </p>
+
+    <div class="hero-buttons">
+        <button class="btn-primary">Start Free Trial</button>
+        <button class="btn-secondary">Learn More</button>
+    </div>
+
+    <!-- HERO IMAGE -->
+    <div class="hero-img-box">
+        <img src="assets/img.jpg" class="hero-img">
+
+        <div class="tag tag-left">
+            <span class="tag-title">Organic T-Shirt</span><br>
+            SKU: 12345<br>
+            <span class="tag-stock">In Stock: 15</span>
+        </div>
+
+        <div class="tag tag-right">
+            <span class="tag-title">Handmade Mug</span><br>
+            SKU: 67890<br>
+            <span class="tag-stock">In Stock: 8</span>
+        </div>
+
+        <div class="footer-labels">
+            <span>🤖 AI Processing</span>
+            <span>🔄 Syncing</span>
+        </div>
+    </div>
+
+    <!-- TRUSTED BRANDS -->
+    <p class="trusted">TRUSTED BY INNOVATIVE BUSINESSES WORLDWIDE</p>
+
+    <div class="brands">
+        <span>🏪 Local Mart</span>
+        <span>☕ BeanBrew</span>
+        <span>👗 Style Co.</span>
+        <span>📚 PageTurners</span>
+        <span>🌸 Bloom</span>
+    </div>
+
+</div>
+
 </body>
 </html>

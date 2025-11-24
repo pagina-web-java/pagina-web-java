@@ -1,9 +1,13 @@
+/* ---------- FUENTE EXTERNA ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
 /* ---------- GENERAL ---------- */
 body {
     margin: 0;
     font-family: "Inter", sans-serif;
     background: #0B071A;
     color: white;
+    line-height: 1.6;
 }
 
 .container {
@@ -59,6 +63,7 @@ body {
     color: white;
     font-weight: 600;
     cursor: pointer;
+    font-size: 14px;
 }
 
 .btn-demo:hover {
@@ -82,10 +87,11 @@ h1 {
     max-width: 600px;
     margin: 0 auto;
     opacity: 0.8;
+    font-size: 18px;
 }
 
 .hero-buttons {
-    margin-top: 20px;
+    margin-top: 30px;
     display: flex;
     gap: 20px;
     justify-content: center;
@@ -93,77 +99,97 @@ h1 {
 
 .btn-primary {
     background: #6C3BFF;
-    padding: 12px 22px;
+    padding: 12px 28px;
     border-radius: 8px;
     border: none;
     color: white;
     font-weight: 600;
     cursor: pointer;
+    font-size: 16px;
 }
 
-.btn-primary:hover { background: #7A4BFF; }
-
-.btn-secondary {
-    background: #262335;
-    padding: 12px 22px;
-    border-radius: 8px;
-    border: none;
-    color: white;
-    cursor: pointer;
+.btn-primary:hover {
+    background: #7A4BFF;
 }
 
-/* ---------- HERO IMAGE ---------- */
-.hero-img-box {
-    position: relative;
+.btn-primary:disabled {
+    background: #5a30cc;
+    cursor: not-allowed;
+}
+
+/* ---------- INVENTORY DASHBOARD ---------- */
+#inventory-section h2 {
     margin-top: 40px;
+    font-size: 32px;
+    font-weight: 800;
 }
 
-.hero-img {
-    width: 100%;
+.product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.product-card {
+    background: #1a162a;
     border-radius: 12px;
+    padding: 20px;
+    width: 220px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    text-align: left;
+    transition: transform 0.2s;
 }
 
-.tag {
-    position: absolute;
-    background: rgba(0, 0, 0, 0.65);
-    padding: 10px 15px;
-    border-radius: 8px;
-    font-size: 13px;
+.product-card:hover {
+    transform: translateY(-4px);
 }
 
-.tag-left {
-    top: 38%;
-    left: 12%;
+.product-category {
+    font-size: 10px;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: white;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: inline-block;
 }
 
-.tag-right {
-    top: 60%;
-    right: 10%;
+.product-category.botellas {
+    background: #3A86FF;
 }
 
-.tag-title {
+.product-category.filetes {
+    background: #FF006E;
+}
+
+.product-category.snacks {
+    background: #FFBE0B;
+    color: #000;
+}
+
+.product-card h3 {
+    margin: 8px 0 12px;
+    font-size: 18px;
     font-weight: 700;
 }
 
-.tag-stock {
-    color: #6CFF7A;
+.product-card p {
+    margin: 6px 0;
+    font-size: 14px;
+    opacity: 0.9;
 }
 
-.footer-labels {
-    position: absolute;
-    bottom: 15px;
-    right: 20px;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 8px 15px;
-    border-radius: 8px;
-    display: flex;
-    gap: 15px;
-    font-size: 12px;
+.stock {
+    color: #6CFF7A;
+    font-weight: bold;
 }
 
 /* ---------- TRUSTED BRANDS ---------- */
 .trusted {
-    margin-top: 30px;
+    margin-top: 50px;
     opacity: 0.7;
     font-size: 12px;
 }
@@ -178,20 +204,53 @@ h1 {
 
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 768px) {
-    h1 { font-size: 36px; }
+    h1 {
+        font-size: 36px;
+    }
+
+    .subtitle {
+        font-size: 16px;
+        padding: 0 10px;
+    }
 
     .menu {
-        display: none; /* Oculta secciones en móvil */
+        display: none;
+        /* Oculta menú en móvil */
+    }
+
+    .btn-primary {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+
+    .product-card {
+        width: 100%;
+        max-width: 300px;
     }
 
     .brands {
         flex-wrap: wrap;
-        gap: 10px;
+        gap: 12px;
+        font-size: 13px;
     }
 
-    .footer-labels {
-        right: 10px;
-        bottom: 10px;
-        font-size: 10px;
+    .trusted {
+        margin-top: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 28px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-primary {
+        width: 100%;
+        max-width: 280px;
     }
 }

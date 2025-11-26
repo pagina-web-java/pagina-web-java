@@ -6,6 +6,7 @@
     <title>VisionStock - Admin Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles.css">
+
     <style>
         /* Estilos adicionales para el inventario (puedes moverlos a styles.css si prefieres) */
         .product-grid {
@@ -117,7 +118,7 @@
 
     </div>
 
-    <!-- SCRIPT: Conexión con API en Java -->
+    <!-- SCRIPT: Conexión con API en http://localhost:3000 -->
     <script>
         document.getElementById('start-trial-btn').addEventListener('click', async () => {
             const btn = document.getElementById('start-trial-btn');
@@ -131,22 +132,24 @@
             inventoryList.innerHTML = '<p>Cargando inventario desde la API...</p>';
 
             try {
-                // 👉 Conecta con la API hecha en Java (puerto 8080)
-                const response = await fetch('http://localhost:8080/api/inventory');
+                // 👉 Conecta con la API de tus compañeros (puerto 3000)
+                // Ajusta la ruta /api/inventory si tu backend usa otra (por ej. /products)
+                const response = await fetch('http://localhost:3000/api/inventory');
 
                 if (!response.ok) {
                     throw new Error(`Error ${response.status}: ${response.statusText}`);
                 }
 
                 const products = await response.json();
+                console.log('Productos desde API:', products);
 
                 // Renderizar productos
-                if (products.length === 0) {
+                if (!Array.isArray(products) || products.length === 0) {
                     inventoryList.innerHTML = '<p>No se han detectado productos aún.</p>';
                 } else {
                     let html = '<div class="product-grid">';
                     products.forEach(p => {
-                        const category = p.category || 'sin-categoria';
+                        const category = (p.category || 'sin-categoria').toLowerCase();
                         html += `
                         <div class="product-card">
                             <div class="product-category ${category}">${category}</div>
@@ -167,10 +170,10 @@
                 console.error('Error al conectar con la API:', err);
                 inventoryList.innerHTML = `
                     <p style="color: #ff6b6b; max-width: 600px; margin: 20px auto;">
-                        ⚠️ No se pudo cargar el inventario. 
-                        <br>Asegúrate de que el <strong>servidor Java</strong> esté corriendo en 
-                        <code>http://localhost:8080</code> 
-                        y que la base de datos MySQL esté activa.
+                        ⚠️ No se pudo cargar el inventario.<br>
+                        Verifica que el <strong>backend</strong> esté corriendo en 
+                        <code>http://localhost:3000</code> y que tenga el endpoint 
+                        <code>/api/inventory</code> con CORS habilitado.
                     </p>
                 `;
             } finally {

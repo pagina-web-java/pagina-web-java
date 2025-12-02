@@ -6,6 +6,7 @@
     <title>VisionStock - Admin Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles.css">
+
     <style>
         /* Estilos adicionales para el inventario (puedes moverlos a styles.css si prefieres) */
         .product-grid {
@@ -57,6 +58,20 @@
         #inventory-section h2 {
             margin-top: 40px;
             font-size: 32px;
+        }
+
+        .raw-response {
+            text-align: left;
+            background: #11101f;
+            padding: 16px;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 20px auto 0;
+            overflow-x: auto;
+            font-family: "Consolas", "Fira Code", monospace;
+            font-size: 13px;
+            color: #e5e7eb;
+            white-space: pre;
         }
     </style>
 </head>
@@ -117,67 +132,90 @@
 
     </div>
 
-    <!-- SCRIPT: Conexión con API en Java -->
+    <!-- ⬇️ SCRIPT AL FINAL DEL BODY ⬇️ -->
     <script>
-        document.getElementById('start-trial-btn').addEventListener('click', async () => {
-            const btn = document.getElementById('start-trial-btn');
-            const hero = document.getElementById('hero-section');
-            const inventorySection = document.getElementById('inventory-section');
-            const inventoryList = document.getElementById('inventory-list');
+        const btn = document.getElementById('start-trial-btn');
+        const hero = document.getElementById('hero-section');
+        const inventorySection = document.getElementById('inventory-section');
+        const inventoryList = document.getElementById('inventory-list');
 
-            // Deshabilitar botón y mostrar estado de carga
-            btn.disabled = true;
-            btn.textContent = 'Cargando...';
-            inventoryList.innerHTML = '<p>Cargando inventario desde la API...</p>';
+        if (!btn) {
+            console.error('❌ No se encontró el botón #start-trial-btn');
+        } else {
+            btn.addEventListener('click', async () => {
+                console.log('✅ Click en "Ver Inventario en Tiempo Real"');
 
-            try {
-                // 👉 Conecta con la API hecha en Java (puerto 8080)
-                const response = await fetch('http://localhost:8080/api/inventory');
-
-                if (!response.ok) {
-                    throw new Error(`Error ${response.status}: ${response.statusText}`);
-                }
-
-                const products = await response.json();
-
-                // Renderizar productos
-                if (products.length === 0) {
-                    inventoryList.innerHTML = '<p>No se han detectado productos aún.</p>';
-                } else {
-                    let html = '<div class="product-grid">';
-                    products.forEach(p => {
-                        const category = p.category || 'sin-categoria';
-                        html += `
-                        <div class="product-card">
-                            <div class="product-category ${category}">${category}</div>
-                            <h3>${p.name || 'Producto sin nombre'}</h3>
-                            <p><strong>SKU:</strong> ${p.sku || 'N/A'}</p>
-                            <p><strong>Stock:</strong> <span class="stock">${p.stock != null ? p.stock : '0'}</span></p>
-                        </div>`;
-                    });
-                    html += '</div>';
-                    inventoryList.innerHTML = html;
-                }
-
-                // Mostrar dashboard y ocultar hero
+                // Mostrar inventario y ocultar hero
                 hero.style.display = 'none';
                 inventorySection.style.display = 'block';
 
-            } catch (err) {
-                console.error('Error al conectar con la API:', err);
-                inventoryList.innerHTML = `
-                    <p style="color: #ff6b6b; max-width: 600px; margin: 20px auto;">
-                        ⚠️ No se pudo cargar el inventario. 
-                        <br>Asegúrate de que el <strong>servidor Java</strong> esté corriendo en 
-                        <code>http://localhost:8080</code> 
-                        y que la base de datos MySQL esté activa.
-                    </p>
-                `;
-            } finally {
-                btn.disabled = false;
-                btn.textContent = 'Ver Inventario en Tiempo Real';
-            }
-        });
+                // Deshabilitar botón y mostrar estado de carga
+                btn.disabled = true;
+                btn.textContent = 'Cargando...';
+                inventoryList.innerHTML = '<p>Cargando inventario desde http://localhost:3000 ...</p>';
+
+                try {
+                    // Petición directa al backend
+                    const response = await fetch('http://localhost:3000');
+
+                    const contentType = response.headers.get('content-type') || '';
+                    let data;
+
+                    if (contentType.includes('application/json')) {
+                        data = await response.json();
+                    } else {
+                        const text = await response.text();
+                        inventoryList.innerHTML = `
+                            <p>Respuesta cruda desde <code>http://localhost:3000</code>:</p>
+                            <div class="raw-response">${text.replace(/</g, '&lt;')}</div>
+                        `;
+                        console.log('Respuesta texto:', text);
+                        return;
+                    }
+
+                    console.log('Respuesta JSON:', data);
+
+                    if (Array.isArray(data)) {
+                        if (data.length === 0) {
+                            inventoryList.innerHTML = '<p>No se han detectado productos aún.</p>';
+                        } else {
+                            let html = '<div class="product-grid">';
+                            data.forEach(p => {
+                                const category = (p.category || 'sin-categoria').toLowerCase();
+                                html += `
+                                <div class="product-card">
+                                    <div class="product-category ${category}">${category}</div>
+                                    <h3>${p.name || 'Producto sin nombre'}</h3>
+                                    <p><strong>SKU:</strong> ${p.sku || 'N/A'}</p>
+                                    <p><strong>Stock:</strong> <span class="stock">${p.stock != null ? p.stock : '0'}</span></p>
+                                </div>`;
+                            });
+                            html += '</div>';
+                            inventoryList.innerHTML = html;
+                        }
+                    } else {
+                        inventoryList.innerHTML = `
+                            <p>Respuesta JSON desde <code>http://localhost:3000</code>:</p>
+                            <div class="raw-response">${JSON.stringify(data, null, 2)}</div>
+                        `;
+                    }
+
+                } catch (err) {
+                    console.error('Error al conectar con la API:', err);
+                    inventoryList.innerHTML = `
+                        <p style="color: #ff6b6b; max-width: 600px; margin: 20px auto;">
+                            ⚠️ No se pudo cargar el inventario.<br>
+                            Verifica que el <strong>backend</strong> esté corriendo en 
+                            <code>http://localhost:3000</code> y que permita peticiones desde tu navegador (CORS).<br><br>
+                            Detalle: <code>${err.message}</code>
+                        </p>
+                    `;
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = 'Ver Inventario en Tiempo Real';
+                }
+            });
+        }
     </script>
 </body>
 
